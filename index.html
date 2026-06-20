@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Qhali Life - Cerca de tu U</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="glass-header">
+  <div class="logo">Qhali Life </div>
+  <div class="nav-links">
+    <a href="#inicio">Inicio</a>
+    <a href="#menu">Menú</a>
+    <a href="#ofertas">Ofertas</a>
+    <a href="#tips">Tips</a>
+    <a href="#registro">Registro</a>
+    <div id="userMenuContainer"></div>
+    <div class="cart-icon" id="cartIcon"><i class="fas fa-bag-shopping"></i><span class="cart-count" id="cartCount">0</span></div>
+  </div>
+</header>
+
+<!-- Modal login -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" id="closeModalBtn">&times;</span>
+    <h2>Iniciar sesión</h2>
+    <form id="loginFormModal">
+      <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Correo" required></div>
+      <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Contraseña" required></div>
+      <button type="submit" class="btn-primary" style="width:100%">Ingresar</button>
+      <p style="margin-top:15px; text-align:center;">¿No tienes cuenta? <a href="#registro" id="goToRegistro" style="color:#5f8d4e;">Regístrate</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- Modal nutricional -->
+<div id="nutritionModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" id="closeNutritionModal">&times;</span>
+    <h3 id="nutritionTitle"></h3>
+    <p id="nutritionText"></p>
+  </div>
+</div>
+
+<!-- CARRUSEL -->
+<section id="inicio" class="carousel-container">
+  <div class="carousel-slide active" style="background-image: linear-gradient(125deg,#1d3e1a,#102a0e),url('http://theadonislab.com/wp-content/uploads/2019/05/4f6a2dd7af4b59bb7c2def93c7424bb3.jpg'); background-blend-mode: overlay;">
+    <div class="carousel-overlay"></div>
+    <div class="carousel-content">
+      <span style="background:rgba(255,245,200,0.2); padding:6px 22px; border-radius:60px;">#HealthyCampus</span>
+      <h1>Nutre tu mente<br>come en Qhali Life</h1>
+      <button class="btn-primary" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Explorar menú →</button>
+    </div>
+  </div>
+  <div class="carousel-slide" style="background-image: linear-gradient(125deg,#2a4623,#1f351b),url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=2070&auto=format'); background-blend-mode: overlay;">
+    <div class="carousel-overlay"></div>
+    <div class="carousel-content">
+      <span style="background:rgba(0,0,0,0.3); padding:6px 22px; border-radius:60px;">Emprende en tu uni</span>
+      <h1>Vende saludable<br>desde el campus</h1>
+      <button class="btn-primary" onclick="document.getElementById('emprendedor').scrollIntoView({behavior:'smooth'})">Quiero vender →</button>
+    </div>
+  </div>
+  <div class="carousel-slide" style="background-image: linear-gradient(125deg,#416b34,#1d3918),url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=2053&auto=format'); background-blend-mode: overlay;">
+    <div class="carousel-overlay"></div>
+    <div class="carousel-content">
+      <span style="background:#8fbc6e40; padding:6px 20px; border-radius:40px;">Delivery Express</span>
+      <h1>Recibe en tu<br>facultad en 20min</h1>
+      <button class="btn-primary" onclick="alert('Próximamente puntos de recojo')">Más info</button>
+    </div>
+  </div>
+  <div class="carousel-dots" id="carouselDots"></div>
+</section>
+
+<!-- Búsqueda y filtros -->
+<section class="section-padding" style="padding-top:20px;">
+  <div style="max-width:600px; margin:0 auto 30px;">
+    <div class="input-group"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Buscar..."></div>
+  </div>
+  <div class="category-filters" id="categoryFilters">
+    <button class="category-btn active" data-cat="all">Todos</button>
+    <button class="category-btn" data-cat="bowl">Bowls</button>
+    <button class="category-btn" data-cat="wrap">Wraps</button>
+    <button class="category-btn" data-cat="jugo">Jugos</button>
+    <button class="category-btn" data-cat="postre">Postres</button>
+  </div>
+</section>
+
+<!-- MENÚ PRINCIPAL -->
+<section id="menu" class="section-padding" style="background:#fefcf5; padding-top:0;">
+  <div class="section-title"><h2>🌿 Menú saludable</h2><p>Ingredientes frescos, precios justos</p></div>
+  <div class="cards-grid" id="foodGrid"></div>
+</section>
+
+<!-- OFERTAS + PUNTOS -->
+<section id="ofertas" class="section-padding" style="background:#fcf8ef;">
+  <div class="section-title"><h2>⚡ Ofertas del día</h2><p>Descuentos por tiempo limitado</p></div>
+  <div class="offer-timer" id="offerTimer"><span id="timerDisplay">23:59:59</span> restantes</div>
+  <div class="cards-grid" id="offersGrid"></div>
+  <div style="text-align:center; margin-top:40px;">
+    <span class="points-badge"><i class="fas fa-star"></i> Tus puntos Qhali Life: <span id="userPoints">0</span></span>
+    <button id="redeemPointsBtn" class="btn-primary" style="margin-left:15px; background:#f4b942;">Canjear puntos</button>
+  </div>
+</section>
+
+<!-- RECOMENDADOS -->
+<section id="recommended" class="section-padding" style="background:#fff8f0;">
+  <div class="section-title"><h2>🌟 Recomendados para ti</h2><p>Basado en tus pedidos anteriores</p></div>
+  <div class="cards-grid" id="recommendedGrid"></div>
+</section>
+
+<!-- HISTORIAL DE PEDIDOS -->
+<section id="orderHistory" class="section-padding" style="background:#f5faf0;">
+  <div class="section-title"><h2>📦 Historial de pedidos</h2><p>Tus compras anteriores</p></div>
+  <div id="historyList" style="max-width:800px; margin:0 auto;"></div>
+</section>
+
+<!-- TIPS Y TESTIMONIOS -->
+<section id="tips" class="section-padding">
+  <div class="section-title"><h2>📝 Tips & testimonios</h2></div>
+  <div class="grid-tips" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:30px;">
+    <div class="tip-card"><i class="fas fa-apple-alt" style="font-size:2rem; color:#5f8d4e;"></i><h3>Hidrátate bien</h3><p>Bebe 2L de agua diarios.</p></div>
+    <div class="tip-card"><i class="fas fa-carrot"></i><h3>Snacks inteligentes</h3><p>Frutos secos o yogurt.</p></div>
+    <div class="tip-card"><i class="fas fa-dumbbell"></i><h3>Proteína vegetal</h3><p>Legumbres para energía.</p></div>
+    <div class="testimonial-card"><i class="fas fa-quote-left"></i><p>"Qhali Life cambió mis hábitos" — Camila, UPC</p></div>
+    <div class="testimonial-card"><i class="fas fa-quote-left"></i><p>"Vendo mis bowls desde la plataforma" — Emprendedor UPC-Monterrico</p></div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section class="section-padding" style="background:#f0f7ea;">
+  <div class="section-title"><h2>📖 Blog de nutrición</h2></div>
+  <div class="cards-grid">
+    <div class="food-card">
+      <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600" alt="blog">
+      <div class="card-info"><h3>5 desayunos en 5 minutos</h3><p>Ideas saludables.</p><button class="btn-order" onclick="showToast('Artículo pronto')">Leer más</button></div>
+    </div>
+    <div class="food-card">
+      <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600" alt="blog">
+      <div class="card-info"><h3>Comer en época de exámenes</h3><p>Alimentos que mejoran la memoria.</p><button class="btn-order" onclick="showToast('Pronto disponible')">Leer más</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRO -->
+<section id="registro" class="section-padding">
+  <div class="section-title"><h2>Únete y gana puntos</h2><p>Regístrate +50 puntos Qhali Life</p></div>
+  <div style="max-width:680px;margin:0 auto;">
+    <div class="form-card">
+      <form id="registerForm">
+        <div class="input-group"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Nombre completo" required></div>
+        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Correo electrónico" required></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPassword" placeholder="Contraseña" required></div>
+        <div class="input-group"><i class="fas fa-graduation-cap"></i><select id="regUniversity"><option>UPC-San Miguel</option><option>UPC-Monterrico</option><option>UPC-Villa</option><option>UPC-San Isidro</option></select></div>
+        <button type="submit" class="btn-primary" style="width:100%"><i class="fas fa-leaf"></i> Crear cuenta +50 pts</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- EMPRENDEDOR -->
+<section id="emprendedor" class="section-padding" style="background:#fafaf2;">
+  <div class="section-title"><h2>🚀 ¿Tienes un emprendimiento saludable?</h2><p>Publica tu producto en segundos</p></div>
+  <div class="entrepreneur-panel">
+    <form id="productForm">
+      <div class="grid-2cols" style="display:grid; grid-template-columns:1fr 1fr; gap:25px;">
+        <div class="input-group"><i class="fas fa-apple-alt"></i><input type="text" id="prodName" placeholder="Nombre *" required></div>
+        <div class="input-group"><i class="fas fa-tag"></i><input type="number" id="prodPrice" step="0.5" placeholder="Precio S/.*" required></div>
+        <div class="input-group"><i class="fas fa-pen-fancy"></i><input type="text" id="prodDesc" placeholder="Descripción breve"></div>
+        <div class="input-group"><i class="fas fa-image"></i><input type="text" id="prodImage" placeholder="URL imagen (opcional)"></div>
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%"><i class="fas fa-plus-circle"></i> Publicar en el menú</button>
+    </form>
+  </div>
+</section>
+
+<!-- MAPA DE EMPRENDEDORES -->
+<section class="section-padding" style="background:#fff4e6;">
+  <div class="section-title"><h2>📍 Emprendedores destacados cerca de ti</h2></div>
+  <div class="cards-grid">
+    <div class="food-card">
+      <img src="https://i.pinimg.com/originals/03/80/2f/03802fb4a6522a411c7fe759cf24ad31.jpg?nii=t" alt="local">
+      <div class="card-info"><h3>Healthy Box - UPC</h3><p>Ensaladas y bowls</p><button class="btn-order" onclick="showToast('📍 Campus UPC,San miguel')">Ver ubicación</button></div>
+    </div>
+    <div class="food-card">
+      <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600" alt="local">
+      <div class="card-info"><h3>Fruti U - UPC</h3><p>Jugos naturales</p><button class="btn-order" onclick="showToast('📍 Cerca de la biblioteca central')">Ver</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- CART DRAWER -->
+<div id="cartDrawer" class="cart-drawer">
+  <div class="cart-header">
+    <h3><i class="fas fa-basket-shopping"></i> Mi pedido</h3>
+    <i class="fas fa-times" id="closeCart" style="cursor:pointer;"></i>
+  </div>
+  <div id="cartItemsList" class="cart-items"></div>
+  <div class="address-selector">
+    <label><i class="fas fa-map-marker-alt"></i> Dirección de entrega: </label>
+    <select id="deliveryAddress">
+      <option>Campus UPC - Módulo A</option>
+      <option>Biblioteca central</option>
+      <option>Residencia universitaria</option>
+    </select>
+  </div>
+  <div class="cart-total">
+    <span>Total: </span><span id="cartTotalPrice">S/ 0.00</span>
+    <button id="checkoutBtn" class="btn-primary" style="width:100%; margin-top:15px;">Pagar y ganar puntos</button>
+  </div>
+</div>
+
+<!-- CHAT FLOTANTE -->
+<div class="chat-bubble" id="chatBubble"><i class="fas fa-comment-dots"></i></div>
+<div id="chatWindow" class="chat-window">
+  <div class="chat-header">Asistente Qhali Life</div>
+  <div class="chat-body" id="chatBody">
+    <p>👋 ¡Hola! ¿Necesitas ayuda con tu pedido?</p>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="Escribe aquí...">
+    <button id="sendChat">Enviar</button>
+  </div>
+</div>
+
+<!-- NEWSLETTER en footer -->
+<footer style="text-align:center; padding:40px 5%; background:#eef3e8;">
+  <div style="max-width:500px; margin:0 auto 20px;">
+    <h3>📧 Suscríbete al newsletter</h3>
+    <div class="input-group" style="margin-bottom:0;">
+      <i class="fas fa-envelope"></i>
+      <input type="email" id="newsletterEmail" placeholder="Tu correo">
+      <button id="subscribeBtn" class="btn-primary" style="margin-left:10px;">Suscribir</button>
+    </div>
+  </div>
+  <p>© 2026 Qhali Life — Alimentación consciente para universitarios. <i class="fas fa-heart" style="color:#e67e22;"></i></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
